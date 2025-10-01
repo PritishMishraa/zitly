@@ -23,14 +23,16 @@ export const linksTrpcRoutes = t.router({
     .query(async ({}) => {
       return LINK_LIST;
     }),
-  createLink: t.procedure.input(createLinkSchema).mutation(async ({input, ctx}) => {
-    const linkId = await createLink({
-      accountId: ctx.userInfo.userId,
-      ...input
-    });
-    
-    return linkId;
-  }),
+  createLink: t.procedure
+    .input(createLinkSchema)
+    .mutation(async ({ input, ctx }) => {
+      const linkId = await createLink({
+        accountId: ctx.userInfo.userId,
+        ...input,
+      });
+
+      return linkId;
+    }),
   updateLinkName: t.procedure
     .input(
       z.object({
