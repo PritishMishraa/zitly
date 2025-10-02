@@ -9,9 +9,14 @@ import { TRPCError } from "@trpc/server";
 import {
   ACTIVE_LINKS_LAST_HOUR,
   LAST_30_DAYS_BY_COUNTRY,
-  LINK_LIST,
 } from "./dummy-data";
-import { createLink } from "@repo/data-ops/queries/links";
+import {
+  createLink,
+  getLink,
+  getLinks,
+  updateLinkDestinations,
+  updateLinkName,
+} from "@repo/data-ops/queries/links";
 
 export const linksTrpcRoutes = t.router({
   linkList: t.procedure
@@ -20,17 +25,16 @@ export const linksTrpcRoutes = t.router({
         offset: z.number().optional(),
       }),
     )
-    .query(async ({}) => {
-      return LINK_LIST;
+    .query(async ({ ctx, input }) => {
+      return await getLinks(ctx.userInfo.userId, input.offset?.toString());
     }),
   createLink: t.procedure
     .input(createLinkSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ ctx, input }) => {
       const linkId = await createLink({
         accountId: ctx.userInfo.userId,
         ...input,
       });
-
       return linkId;
     }),
   updateLinkName: t.procedure
@@ -42,6 +46,7 @@ export const linksTrpcRoutes = t.router({
     )
     .mutation(async ({ input }) => {
       console.log(input.linkId, input.name);
+      await updateLinkName(input.linkId, input.name);
     }),
   getLink: t.procedure
     .input(
@@ -49,19 +54,9 @@ export const linksTrpcRoutes = t.router({
         linkId: z.string(),
       }),
     )
-    .query(async ({}) => {
-      const data = {
-        name: "My Sample Link",
-        linkId: "link_123456789",
-        accountId: "user_987654321",
-        destinations: {
-          default: "https://example.com",
-          mobile: "https://mobile.example.com",
-          desktop: "https://desktop.example.com",
-        },
-        created: "2024-01-15T10:30:00Z",
-        updated: "2024-01-20T14:45:00Z",
-      };
+    .query(async ({ input }) => {
+      const data = await getLink(input.linkId);
+
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
       return data;
     }),
@@ -73,7 +68,7 @@ export const linksTrpcRoutes = t.router({
       }),
     )
     .mutation(async ({ input }) => {
-      console.log(input.linkId, input.destinations);
+      await updateLinkDestinations(input.linkId, input.destinations);
     }),
   activeLinks: t.procedure.query(async () => {
     return ACTIVE_LINKS_LAST_HOUR;
