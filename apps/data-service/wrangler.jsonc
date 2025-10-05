@@ -51,4 +51,10 @@
 	"ai": {
 		"binding": "AI",
 	},
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "zitly-eval-stage",
+		},
+	],
 }
