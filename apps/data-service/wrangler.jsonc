@@ -25,4 +25,17 @@
 			"remote": true,
 		},
 	],
+	"queues": {
+		"consumers": [
+			{
+				"queue": "zitly-data-queue-stage",
+			},
+		],
+		"producers": [
+			{
+				"binding": "QUEUE",
+				"queue": "zitly-data-queue-stage",
+			},
+		],
+	},
 }
