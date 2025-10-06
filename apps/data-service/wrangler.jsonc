@@ -47,9 +47,11 @@
 	],
 	"browser": {
 		"binding": "VIRTUAL_BROWSER",
+		"remote": true
 	},
 	"ai": {
 		"binding": "AI",
+		"remote": true
 	},
 	"r2_buckets": [
 		{
