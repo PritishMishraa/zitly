@@ -11,74 +11,78 @@
 	"observability": {
 		"enabled": true,
 	},
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_id": "e672d4e3-b5af-4e82-90db-146ff5489992",
-			"remote": true,
-		},
-	],
-	"kv_namespaces": [
-		{
-			"binding": "CACHE",
-			"id": "89ee193e9f3e444ca264ee1ee6e7ac78",
-			"remote": true,
-		},
-	],
-	"queues": {
-		"consumers": [
-			{
-				"queue": "zitly-data-queue-stage",
+	"env": {
+		"stage": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "e672d4e3-b5af-4e82-90db-146ff5489992",
+					"remote": true,
+				},
+			],
+			"kv_namespaces": [
+				{
+					"binding": "CACHE",
+					"id": "89ee193e9f3e444ca264ee1ee6e7ac78",
+					"remote": true,
+				},
+			],
+			"queues": {
+				"consumers": [
+					{
+						"queue": "zitly-data-queue-stage",
+					},
+				],
+				"producers": [
+					{
+						"binding": "QUEUE",
+						"queue": "zitly-data-queue-stage",
+					},
+				],
 			},
-		],
-		"producers": [
-			{
-				"binding": "QUEUE",
-				"queue": "zitly-data-queue-stage",
+			"workflows": [
+				{
+					"binding": "DESTINATION_EVALUATION_WORKFLOW",
+					"name": "destination-evaluation-workflow",
+					"class_name": "DestinationEvaluationWorkflow",
+				},
+			],
+			"browser": {
+				"binding": "VIRTUAL_BROWSER",
+				"remote": true,
 			},
-		],
-	},
-	"workflows": [
-		{
-			"binding": "DESTINATION_EVALUATION_WORKFLOW",
-			"name": "destination-evaluation-workflow",
-			"class_name": "DestinationEvaluationWorkflow",
-		},
-	],
-	"browser": {
-		"binding": "VIRTUAL_BROWSER",
-		"remote": true,
-	},
-	"ai": {
-		"binding": "AI",
-		"remote": true,
-	},
-	"r2_buckets": [
-		{
-			"binding": "BUCKET",
-			"bucket_name": "zitly-eval-stage",
-		},
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"name": "EVALUATION_SCHEDULAR",
-				"class_name": "EvaluationScheduler",
+			"ai": {
+				"binding": "AI",
+				"remote": true,
 			},
-			{
-				"class_name": "LinkClickTracker",
-				"name": "LINK_CLICK_TRACKER_OBJECT",
+			"r2_buckets": [
+				{
+					"binding": "BUCKET",
+					"bucket_name": "zitly-eval-stage",
+				},
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"name": "EVALUATION_SCHEDULAR",
+						"class_name": "EvaluationScheduler",
+					},
+					{
+						"class_name": "LinkClickTracker",
+						"name": "LINK_CLICK_TRACKER_OBJECT",
+					},
+				],
 			},
-		],
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_classes": ["EvaluationScheduler"],
+				},
+				{
+					"tag": "v2",
+					"new_sqlite_classes": ["LinkClickTracker"],
+				},
+			],
+		},
 	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_classes": ["EvaluationScheduler"],
-		},
-		{
-			"tag": "v2",
-			"new_sqlite_classes": ["LinkClickTracker"],
-		},
-	],
 }
