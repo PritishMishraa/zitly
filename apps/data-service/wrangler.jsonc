@@ -47,11 +47,11 @@
 	],
 	"browser": {
 		"binding": "VIRTUAL_BROWSER",
-		"remote": true
+		"remote": true,
 	},
 	"ai": {
 		"binding": "AI",
-		"remote": true
+		"remote": true,
 	},
 	"r2_buckets": [
 		{
@@ -65,12 +65,20 @@
 				"name": "EVALUATION_SCHEDULAR",
 				"class_name": "EvaluationScheduler",
 			},
+			{
+				"class_name": "LinkClickTracker",
+				"name": "LINK_CLICK_TRACKER_OBJECT",
+			},
 		],
 	},
 	"migrations": [
 		{
 			"tag": "v1",
 			"new_classes": ["EvaluationScheduler"],
+		},
+		{
+			"tag": "v2",
+			"new_sqlite_classes": ["LinkClickTracker"],
 		},
 	],
 }
